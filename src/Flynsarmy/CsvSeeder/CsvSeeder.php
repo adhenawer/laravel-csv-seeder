@@ -27,6 +27,13 @@ class CsvSeeder extends Seeder
 	 * @var string
 	 */
 	public $filename;
+	
+	/**
+	* CSV path of files
+	*
+	* @var string
+	*/
+	public $files_path = null;
 
 	/**
 	 * DB field that to be hashed, most likely a password field.
@@ -83,7 +90,13 @@ class CsvSeeder extends Seeder
 	 */
 	public function run()
 	{
-        $this->seedFromCSV($this->filename, $this->csv_delimiter);
+		if (!is_null($this->files_path)) {
+			foreach (glob($this->files_path . '/*') as $files) {
+				$this->seedFromCSV($files, $this->csv_delimiter);
+			}
+			return;
+		}
+        	$this->seedFromCSV($this->filename, $this->csv_delimiter);
 	}
 
 	/**
